@@ -1,0 +1,3 @@
+首次上传到Github
+右击.idea文件夹，选择Add to .gitignore
+VCS->Import into Version Control->Share project on GitHub
