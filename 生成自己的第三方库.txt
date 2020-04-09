@@ -1,0 +1,36 @@
+1.new Module，选择Library，或者将app的build.gradle的第一句
+apply plugin: 'com.android.application'
+改成
+apply plugin: 'com.android.library'
+
+2.在根目录的build.gradle的dependencies里面加
+classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
+在项目目录的build.gradle的上面加
+apply plugin: 'com.github.dcendents.android-maven'
+这里要注意，根据gradle的版本，maven的plugin的版本要适配
+
+
+3.将项目上传到Github，并且点击Release,填写一些信息，提交生成Release
+
+4.打开https://jitpack.io/并将 github 的项目地址填入，点击 Look Up， 这里项目地址就是url去掉前面https://github.com/，就可以看到release，然后点get it
+
+5.然后在要使用的项目的根目录的build.gradle添加
+allprojects {
+        repositories {
+            ...
+            maven { url 'https://jitpack.io' }  //这个是添加项
+        }
+    }
+
+在module的build.gradle添加
+dependencies {
+         implementation 'com.github.aaaa:Mylib:V1.0'   //这个是添加项
+}
+两个添加项根据jitpack网址给的添加就行
+
+可能存在的问题：
+库中用到了implementation 'androidx.preference:preference:1.1.0-rc01'，若原项目没用到，则会有这个问题
+解决方案：原项目也implementation 'androidx.preference:preference:1.1.0-rc01'，或者库中用api 'androidx.preference:preference:1.1.0-rc01'
+
+同时可能还有个问题，即一边用了androidx，另外一边没用
+最好是都用，可以转化

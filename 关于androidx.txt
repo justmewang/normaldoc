@@ -1,0 +1,11 @@
+androidx是新的依赖库
+若本来没支持androidx，要换需要
+
+1.项目的gradle.properties加入
+android.useAndroidX=true
+android.enableJetifier=true
+
+2.AS菜单Refactor Migrate to Androidx
+主要替换的是module的android.xxx选项，变成androidx.xxx
+
+3.完了之后，可能有些公共组件的包名就变了，把没用的去掉，重新导入就可以，比如AppCompatActivity由原来的android.xxx.什么的变成了androidx.appcompat.app.AppCompatActivity，类名不变
