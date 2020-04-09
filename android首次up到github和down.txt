@@ -1,3 +1,6 @@
 首次上传到Github
 右击.idea文件夹，选择Add to .gitignore
 VCS->Import into Version Control->Share project on GitHub
+
+首次从Githubdown下来
+打开AS，选择New project，然后选择指定的项目
