@@ -34,3 +34,35 @@ dependencies {
 
 同时可能还有个问题，即一边用了androidx，另外一边没用
 最好是都用，可以转化
+
+
+调试库
+若每次第三方库都需要先上传到服务器，再项目更新调试，是不合理的，要本地可以调试
+方法一：源码调试
+在project里new个app module，在app的build.gradle里面的dependencies加入implementation project(":mylibrary")
+方法二：生成aar文件
+1.直接rebuild就可以生成debug版本的aar，要生成release版本的，要用命令行gradlew assembleRelease，在之前，先得在build.gradle的android中加入
+signingConfigs {
+        release {
+            storeFile file('D:\\workfiles\\GitFile\\normaldoc\\wang.jks')
+            storePassword '123456'
+            keyAlias = 'release'
+            keyPassword '123456'
+        }
+    }
+ buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+}
+
+生成release版本后，再新建一个module，选择import jar/aar package，比如起名moduleAar，然后再新建一个app module，然后File ->Project Structure ->Dependencies，选择app，在declared Dependencies选择+，选择module dependency，选择moduleAar，就可以了
+
+
+在Run App的时候，如果报错Android dependency  has different version for the compile (1.0.1) and runtime （1.1.0-rc01），就是上面说的preference问题
+
