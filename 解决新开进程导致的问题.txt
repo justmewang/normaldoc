@@ -1,0 +1,46 @@
+问题原因：若在Application注册一些监听器接收信息，若有多个进程，则会出现多个Application对象，则监听器接收的消息可能会分散到不同的对象中变得不完整。实例是，当接收串口数据时，若开启了多进程，则串口数据收到12345，则可能是是pro1的application收到123，pro2的application收到45
+
+解决方案：
+在注册监听器之前加入：
+ try{
+            //如果不在主进程，则返回，后面初始化只要初始化一次
+            if (!isAppMainProcess()) {
+                return;
+            }
+        }catch (Exception e){
+            LogUtil.d(e.getMessage());
+        }
+
+//是否在主进程
+    public boolean isAppMainProcess() {
+        try {
+            int pid = android.os.Process.myPid();
+            String process = getAppNameByPID(this, pid);
+            if (TextUtils.isEmpty(process)) {
+                return true;
+            } else if ("com.package.name".equalsIgnoreCase(process)) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return true;
+        }
+    }
+
+    /**
+     * 获取进程名
+     * @param context
+     * @param pid
+     * @return
+     */
+    public static String getAppNameByPID(Context context, int pid) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningAppProcessInfo processInfo : manager.getRunningAppProcesses()) {
+            if (processInfo.pid == pid) {
+                return processInfo.processName;
+            }
+        }
+        return "";
+    }

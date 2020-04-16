@@ -1,0 +1,48 @@
+1.指定进程，可以在Manifest的Activity属性中指定android:process=":processOne"来做特殊进程
+2.未被指定的进程在一起，如A，B，C，3个Activity，其中B指定了process属性，那么A启动B，B启动C，A和C在一个进程里面
+3.即使是static 的数据，在不同进程中的值是不通用的，如定义一个Data.class，里面一个static int a；ActivityA的onStart里加入 Data.a +=5;ActivityB的onSTart里加入Data.b += 3;A和B交替start，那么ActivityA里的值是5，10,15这样变，ActivityB里的值是3,6,9这样变，互相不干扰
+
+进程间通信：Aidl
+AIDL文件分为2种，一种是数据类型，一种是接口类型
+
+生成AIDL文件
+选择java目录下一个package，然后右击->new->AIDL，则会生成一个与java平级的aidl文件夹，并且里面的文件目录与刚才选择的package一样。
+如：选择java/com/example/process文件夹，右击生成，则会有aidl/com/example/process/xxx.aidl文件，文件名是自己取的
+
+先生成个Data.aidl，
+然后在java对应的目录生成指定的Data.java，这个名字要与aidl文件一样，然后这个类要实现Parcelable接口
+public class DataAidl implements Parcelable
+
+Parcel类的需求是读和写的顺序必须一致，主要在方法Data(Parcel in)中读，public void writeToParcel(Parcel dest, int flags)中写，这些都是自动生成，自己要特别添加的方式有void readFromParcel(Parcel src)，不加这个，build的时候就会报错，还有，如果类中有List或者Map的参数，需要new一个初始化，不能默认为null，否则出问题
+
+Data.java写好后，写Data.aidl，将里面默认的interface删掉，只用保留package，然后加一行parcelable DataAidl;声明，就够了，只要2行
+
+然后生成个Controller.aidl，这个里面的interface里写一些数据读写的接口，其中void setData(inout Data data); inout是必须的，可以是in，out，inout3种之一，这里使用的自定义数据类，一定要import类全名，如import com.example.process.Data
+
+然后clean， rebuild，就会在build->generated->source->aidl里面生成一些有用的东西
+
+然后写服务器端，服务器端一般是个Service，因为如果用Activity的话，周期有点难把握
+
+Service里面主要private final IControllerAidl.Stub stub = new IControllerAidl.Stub()；然后在onBind里面把这个stub返回
+
+然后在manifest里面声明这个Service，两个属性android:enabled="true" android:exported="true"， 然后加个intent-filter，加action name属性(后面绑定的时候action name就是这个)和category name属性
+
+然后写客户端，客户端先将前面生成的AIDL文件夹和Data文件复制一份，然后在客户端Activity里面
+声明一个Controller 变量，然后 ServiceConnection connection = new ServiceConnection()，在onServiceConnected()里controllerAidl = IControllerAidl.Stub.asInterface(service);
+
+然后在onCreate时绑定，
+Intent intent = new Intent();
+//setComponent和setPackage用其中一个就行
+        ComponentName componentName = new ComponentName("service package name", "service full path name");  
+        intent.setComponent(componentName);
+//        intent.setPackage("service package name");
+        intent.setAction("service action name");
+        bindService(intent,connection, Context.BIND_AUTO_CREATE)
+在Destroy时解绑
+unbindService(connection);
+
+有两个注意的地方，
+1，bindService可能返回失败，但是即使失败，也要UNbind，否则报个什么leak的错误
+2. onServiceConnected比第一次onResume要后，所以如果要拿数据刷UI要注意时序
+
+

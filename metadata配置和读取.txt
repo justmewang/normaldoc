@@ -1,0 +1,16 @@
+meta-data的配置，在manifest里面
+<application>
+<meta-data android:name="app_meta"
+android:value="abc"/>
+<Activity>
+<meta-data android:name="act_meta"
+android:value="qwe"/>
+</Activity>
+</application>
+
+读取
+ ApplicationInfo appInfo = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+ appInfo.metaData.getString("app_meta");   //abc
+
+ActivityInfo actInfo = getPackageManager().getActivityInfo(getComponentName(), PackageManager.GET_META_DATA);
+ actInfo.metaData.getString("act_meta");   //qwe
