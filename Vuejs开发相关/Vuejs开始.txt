@@ -1,0 +1,14 @@
+官网：https://cn.vuejs.org/v2/guide/installation.html#Vue-Devtools
+
+首先下载一个HBuildx，用于编辑Vue文件
+
+首先一种简单导入方式
+
+新建一个VueDemo文件夹，直接拖到HB图标，就开始了一个项目，安装Vue的4种方式，这里说了2种简单的：
+1.
+官网下载一个vue.js文件，然后复制到项目里面
+然后新建一个html文件，在<head>标签里加入<script src="vue.js" type="text/javascript" charset="utf-8"></script>
+
+2.
+不用下载vue.js，直接新建html，在head加入<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>，加入src去官网看
+

@@ -1,0 +1,16 @@
+在body里面：
+<div id="appname">
+          {{ message }}
+</div>
+<script type="text/javascript">
+       var app = new Vue({
+       el: '#app',
+       data: {
+                      message: 'Hello Vue!'
+                }
+       })
+</script>
+
+首先div的id，跟script里面的el对应
+然后用{{dataname}}表示个变量，在下面的data里面可以赋值
+
