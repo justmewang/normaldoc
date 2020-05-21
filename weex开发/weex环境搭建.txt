@@ -3,7 +3,14 @@ https://weex.apache.org/
 
 先安装Node.js
 
+
 然后打开一个cmd，输入
+npm config set prefix "D:\Develop\nodejs\node_global"
+npm config set cache "D:\Develop\nodejs\node_cache"
+配置node的缓存和下载
+
+用webstorm开发的话，激活码在http://idea.medeming.com/jihuoma/
+
 npm i -g weex-toolkit 
 完成后C:\Users\immotor\AppData\Roaming\npm\weex -> C:\Users\immotor\AppData\Roaming\npm\node_modules\weex-toolkit\bin\weex.js
 输入weex -v查看版本，中间可以选择npm镜像，可以选择taobao
@@ -49,3 +56,8 @@ To get started:
 在项目根目录有个android.config.json，里面的appId就是包名
 
 npm run android后，在platforms里面会生成android项目
+
+用webstorm打开项目，然后在run选择edit configurations,点击tenplates，选择npm，然后点个+，然后右边scripts点web(想在安卓手机看就选android)
+
+关于调试问题，要用goole Chrome浏览器，还要用低版本
+https://www.jianshu.com/p/372a43a3477b，参考这个
