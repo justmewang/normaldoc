@@ -13,3 +13,13 @@
 然后下载AS
 然后下载git，然后下载GitHub Desktop
 配置git，使git下载上传不至于总是失败
+
+
+安卓系统盘瘦身：
+在\C:\Users\username\下面，有.AndroidStudo3.6和.grandle文件夹，里面数据超大，把这两个文件夹复制到D盘，然后在AndroiStudio的安装目录的bin里面，找到idea.properties文件，
+将# idea.config.path=${user.home}/.AndroidStudio/config
+改成idea.config.path=D:/Android/Cache/.AndroidStudio/config
+将# idea.system.path=${user.home}/.AndroidStudio/system
+改成idea.system.path=D:/Android/Cache/.AndroidStudio/system
+然后配置系统变量GRADLE_USER_HOME，路径为D:\worksoft\androidbackup\.gradle
+然后打开Androidstudio，在setting中找到Gradle，看配置是否正确，选Use default gradle wrapper就可以
